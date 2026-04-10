@@ -48,14 +48,46 @@
       color: #2f7d62;
       font-weight: 700;
     }
+
+    .actions {
+      margin-top: 22px;
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 12px 18px;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 700;
+      border: 1px solid rgba(31, 43, 36, 0.08);
+    }
+
+    .btn.primary {
+      background: linear-gradient(135deg, #2f7d62, #3d9978);
+      color: #fffaf2;
+      border: none;
+    }
+
+    .btn.secondary {
+      background: rgba(255, 255, 255, 0.92);
+      color: #1f2b24;
+    }
   </style>
 </head>
 <body>
   <main class="card">
     <h1>Submission Complete</h1>
     <p>Thank you for completing the questionnaire.</p>
-    <p>Your responses have been submitted. This participant session is now marked as completed to help prevent duplicate submissions.</p>
+    <p>Your responses have been submitted successfully.</p>
     <p class="pill" id="participantLine">Participant recorded</p>
+    <div class="actions">
+      <a class="btn primary" href="./questionnaire.html">Submit Another Response</a>
+      <a class="btn secondary" href="./">Back to Home</a>
+    </div>
   </main>
 
   <script>
