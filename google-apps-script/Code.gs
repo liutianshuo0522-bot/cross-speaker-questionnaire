@@ -1,4 +1,4 @@
-var SPREADSHEET_ID = "1B7LC3hGP8YD_ue4le2eMUBFHWvHIVwaPFspAi9ZM5vg";
+var SPREADSHEET_ID = "1k1h_JjotTir_m3WmuU3MmebZ_WQ1O2pbwHqouH9Pixk";
 var RESPONSE_SHEET_NAME = "responses";
 var ERROR_SHEET_NAME = "errors";
 var RAW_SHEET_NAME = "raw_submissions";
@@ -19,9 +19,35 @@ function getOrCreateSheet_(sheetName, headers) {
   var sheet = spreadsheet.getSheetByName(sheetName);
   if (!sheet) {
     sheet = spreadsheet.insertSheet(sheetName);
-    sheet.appendRow(headers);
   }
+  syncHeaders_(sheet, headers);
   return sheet;
+}
+
+function syncHeaders_(sheet, headers) {
+  var width = headers.length;
+  var currentHeaders = [];
+
+  if (sheet.getLastColumn() > 0) {
+    currentHeaders = sheet.getRange(1, 1, 1, Math.max(sheet.getLastColumn(), width)).getValues()[0];
+  }
+
+  var changed = currentHeaders.length < width;
+  if (!changed) {
+    for (var i = 0; i < width; i += 1) {
+      if (String(currentHeaders[i] || "") !== String(headers[i] || "")) {
+        changed = true;
+        break;
+      }
+    }
+  }
+
+  if (changed) {
+    if (sheet.getMaxColumns() < width) {
+      sheet.insertColumnsAfter(sheet.getMaxColumns(), width - sheet.getMaxColumns());
+    }
+    sheet.getRange(1, 1, 1, width).setValues([headers]);
+  }
 }
 
 function logError_(message, rawPayload) {
