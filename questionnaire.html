@@ -869,21 +869,11 @@
       return "";
     }
 
-    function markSubmitted(payload) {
-      const submittedRecord = {
+    function buildSubmissionRecord(payload) {
+      return {
         participantId: payload.meta.participantId,
         submittedAt: new Date().toISOString()
       };
-      localStorage.setItem(`${STORAGE_KEY}:submitted`, JSON.stringify(submittedRecord));
-      return submittedRecord;
-    }
-
-    function getSubmittedRecord() {
-      try {
-        return JSON.parse(localStorage.getItem(`${STORAGE_KEY}:submitted`)) || null;
-      } catch (error) {
-        return null;
-      }
     }
 
     function redirectToSuccess(record) {
@@ -895,12 +885,6 @@
 
     function submitResponses() {
       const button = document.getElementById("submitBtn");
-      const existingRecord = getSubmittedRecord();
-      if (existingRecord) {
-        redirectToSuccess(existingRecord);
-        return;
-      }
-
       const payload = collectResponses();
       const error = validateSubmission(payload);
       if (error) {
@@ -918,7 +902,7 @@
 
       try {
         form.submit();
-        const record = markSubmitted(payload);
+        const record = buildSubmissionRecord(payload);
         redirectToSuccess(record);
       } catch (submitError) {
         setStatus(`Submission failed: ${submitError.message}`);
@@ -938,7 +922,6 @@
       document.getElementById("resetBtn").addEventListener("click", () => {
         if (!window.confirm("Clear the local draft stored in this browser?")) return;
         localStorage.removeItem(STORAGE_KEY);
-        localStorage.removeItem(`${STORAGE_KEY}:submitted`);
         window.location.reload();
       });
     }
@@ -960,11 +943,6 @@
     attachEvents();
     updateProgress();
     initEndpointNotice();
-
-    const submittedRecord = getSubmittedRecord();
-    if (submittedRecord) {
-      setTimeout(() => redirectToSuccess(submittedRecord), 50);
-    }
   </script>
 </body>
 </html>
