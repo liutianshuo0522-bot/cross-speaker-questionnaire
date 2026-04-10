@@ -68,7 +68,7 @@ function doPost(e) {
       "joyfulness",
       "naturalness",
       "more_joyful_sample",
-      "more_identity_leakage_sample"
+      "same_person_likelihood"
     ]);
 
     var rawSheet = getOrCreateSheet_(RAW_SHEET_NAME, [
@@ -112,7 +112,7 @@ function doPost(e) {
           sample.joyfulness || "",
           sample.naturalness || "",
           trial.moreJoyful || "",
-          trial.moreLeakage || ""
+          trial.samePersonLikelihood || ""
         ]);
       });
     });

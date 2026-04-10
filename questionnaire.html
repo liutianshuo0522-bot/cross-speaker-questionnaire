@@ -406,7 +406,7 @@
       <h1>Joyfulness and Identity Leakage Questionnaire</h1>
       <p class="lead">
         This version focuses only on the core judgments you asked for.
-        There are 6 rating trials for joyfulness and naturalness, and 4 comparison trials focused only on the two <code>arctic+++</code> models.
+        There are 6 rating trials for joyfulness and naturalness, and 4 comparison trials between two anonymous synthesized voices.
       </p>
       <div class="grid">
         <div class="pill">6 rating trials</div>
@@ -418,8 +418,8 @@
     <section class="panel">
       <h2>Instructions</h2>
       <p class="section-note">
-        Participants only see anonymous labels, but the backend payload always records the true model name, blind label, trial id,
-        task type, and display order. This means the results remain fully traceable even when sample order is shuffled.
+        Participants only see anonymous labels. Internally, the backend still records the true condition, blind label, trial id,
+        task type, and display order, so the results remain traceable even when sample order is shuffled.
       </p>
       <div id="endpointAlert" class="alert">
         Submission is not configured yet. Add your backend endpoint in <code>config.js</code> before collecting responses online.
@@ -468,9 +468,9 @@
       <div class="section-header">
         <div>
           <div class="task-tag">Task 2</div>
-          <h2>4 Trials: Compare the Two <code>arctic+++</code> Models</h2>
+          <h2>4 Trials: Compare Two Anonymous Voices</h2>
           <p class="section-note">
-            In these trials, only the two <code>arctic+++</code> models are shown. Choose which one sounds more joyful and which one shows more identity leakage.
+            In these trials, only two anonymous synthesized voices are shown. Choose which one sounds more joyful, then judge how likely the two voices are to come from the same person.
           </p>
         </div>
       </div>
@@ -757,12 +757,12 @@
                 <div class="trial-id">${trial.id}</div>
                 <div class="trial-text">${trial.text}</div>
               </div>
-              <div class="pill">2 anonymous arctic+++ samples</div>
+              <div class="pill">2 anonymous samples</div>
             </summary>
             <div class="trial-body" data-trial-id="${trial.id}" data-task="compare_plus">
               <div class="reference-box">
                 <h3>Reference Joyful Sample</h3>
-                <p class="footer-note">Only the two arctic+++ models are shown in this comparison task.</p>
+                <p class="footer-note">Only two anonymous synthesized voices are shown in this comparison task.</p>
                 <audio controls preload="none" src="${encodePath(trial.reference)}"></audio>
               </div>
               <div class="audio-grid">
@@ -783,14 +783,12 @@
                   )}
                 </div>
                 <div class="compare-box">
-                  <div class="question-title">Which sample shows more identity leakage?</div>
-                  ${choiceHTML(
-                    `${trial.id}_more_leakage`,
-                    [
-                      ...trial.randomizedSamples.map((sample) => ({ label: sample.blind, value: sample.blind })),
-                      { label: "Neither", value: "Neither" }
-                    ],
-                    savedTrial.moreLeakage || ""
+                  <div class="question-title">How likely is it that these two voices come from the same person?</div>
+                  ${likertHTML(
+                    `${trial.id}_same_person`,
+                    "1 = Very unlikely",
+                    "5 = Very likely",
+                    savedTrial.samePersonLikelihood || ""
                   )}
                 </div>
               </div>
@@ -836,7 +834,7 @@
           task,
           text: preparedTrials.find((trial) => trial.id === trialId)?.text || "",
           moreJoyful: trialEl.querySelector(`input[name="${trialId}_more_joyful"]:checked`)?.value || "",
-          moreLeakage: trialEl.querySelector(`input[name="${trialId}_more_leakage"]:checked`)?.value || "",
+          samePersonLikelihood: trialEl.querySelector(`input[name="${trialId}_same_person"]:checked`)?.value || "",
           samples
         };
       });
@@ -897,7 +895,7 @@
       try {
         form.submit();
         markSubmitted(payload);
-        setStatus("Submission sent. True model IDs are included in the payload.", "success");
+        setStatus("Submission sent.", "success");
       } catch (submitError) {
         setStatus(`Submission failed: ${submitError.message}`);
       } finally {
@@ -928,7 +926,7 @@
         return;
       }
 
-      alert.textContent = `Connected to backend endpoint for ${PROJECT_NAME}. The payload records true model mapping even when the page shows anonymous labels.`;
+      alert.textContent = `Connected to backend endpoint for ${PROJECT_NAME}.`;
       alert.classList.add("success");
     }
 
