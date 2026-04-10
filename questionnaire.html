@@ -499,6 +499,7 @@
   <script src="./config.js"></script>
   <script>
     const STORAGE_KEY = "cross-speaker-questionnaire-v4";
+    const SUCCESS_PAGE = "./success.html";
     const APP_CONFIG = window.QUESTIONNAIRE_CONFIG || {};
     const SUBMISSION_ENDPOINT = APP_CONFIG.submissionEndpoint || "";
     const PROJECT_NAME = APP_CONFIG.projectName || "cross-speaker-questionnaire";
@@ -869,14 +870,37 @@
     }
 
     function markSubmitted(payload) {
-      localStorage.setItem(`${STORAGE_KEY}:submitted`, JSON.stringify({
+      const submittedRecord = {
         participantId: payload.meta.participantId,
         submittedAt: new Date().toISOString()
-      }));
+      };
+      localStorage.setItem(`${STORAGE_KEY}:submitted`, JSON.stringify(submittedRecord));
+      return submittedRecord;
+    }
+
+    function getSubmittedRecord() {
+      try {
+        return JSON.parse(localStorage.getItem(`${STORAGE_KEY}:submitted`)) || null;
+      } catch (error) {
+        return null;
+      }
+    }
+
+    function redirectToSuccess(record) {
+      const url = new URL(SUCCESS_PAGE, window.location.href);
+      if (record && record.participantId) url.searchParams.set("participant", record.participantId);
+      if (record && record.submittedAt) url.searchParams.set("submittedAt", record.submittedAt);
+      window.location.href = url.toString();
     }
 
     function submitResponses() {
       const button = document.getElementById("submitBtn");
+      const existingRecord = getSubmittedRecord();
+      if (existingRecord) {
+        redirectToSuccess(existingRecord);
+        return;
+      }
+
       const payload = collectResponses();
       const error = validateSubmission(payload);
       if (error) {
@@ -894,8 +918,8 @@
 
       try {
         form.submit();
-        markSubmitted(payload);
-        setStatus("Submission sent.", "success");
+        const record = markSubmitted(payload);
+        redirectToSuccess(record);
       } catch (submitError) {
         setStatus(`Submission failed: ${submitError.message}`);
       } finally {
@@ -936,6 +960,11 @@
     attachEvents();
     updateProgress();
     initEndpointNotice();
+
+    const submittedRecord = getSubmittedRecord();
+    if (submittedRecord) {
+      setTimeout(() => redirectToSuccess(submittedRecord), 50);
+    }
   </script>
 </body>
 </html>
