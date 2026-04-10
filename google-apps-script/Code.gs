@@ -15,7 +15,14 @@ function doPost(e) {
     ]);
   }
 
-  var payload = JSON.parse(e.postData.contents);
+  var rawPayload = "";
+  if (e.parameter && e.parameter.payload) {
+    rawPayload = e.parameter.payload;
+  } else if (e.postData && e.postData.contents) {
+    rawPayload = e.postData.contents;
+  }
+
+  var payload = JSON.parse(rawPayload);
 
   sheet.appendRow([
     new Date(),

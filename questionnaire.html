@@ -538,6 +538,11 @@
     </section>
   </div>
 
+  <iframe name="submissionFrame" id="submissionFrame" style="display:none;"></iframe>
+  <form id="submissionForm" method="POST" target="submissionFrame" style="display:none;">
+    <input type="hidden" name="payload" id="payloadField" />
+  </form>
+
   <script src="./config.js"></script>
   <script>
     const STORAGE_KEY = "cross-speaker-questionnaire-v2";
@@ -922,7 +927,14 @@
       return "";
     }
 
-    async function submitResponses() {
+    function markSubmitted(payload) {
+      localStorage.setItem(`${STORAGE_KEY}:submitted`, JSON.stringify({
+        participantId: payload.meta.participantId,
+        submittedAt: new Date().toISOString()
+      }));
+    }
+
+    function submitResponses() {
       const button = document.getElementById("submitBtn");
       const payload = collectResponses();
       const error = validateSubmission(payload);
@@ -934,25 +946,15 @@
       button.disabled = true;
       setStatus("Submitting responses to the backend...");
 
+      const form = document.getElementById("submissionForm");
+      const payloadField = document.getElementById("payloadField");
+      payloadField.value = JSON.stringify(payload);
+      form.action = SUBMISSION_ENDPOINT;
+
       try {
-        const response = await fetch(SUBMISSION_ENDPOINT, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(payload)
-        });
-
-        const text = await response.text();
-        if (!response.ok) {
-          throw new Error(text || `Request failed with status ${response.status}`);
-        }
-
-        localStorage.setItem(`${STORAGE_KEY}:submitted`, JSON.stringify({
-          participantId: payload.meta.participantId,
-          submittedAt: new Date().toISOString()
-        }));
-        setStatus("Responses submitted successfully. Thank you for participating.", "success");
+        form.submit();
+        markSubmitted(payload);
+        setStatus("Submission sent. Please check the Google Sheet to confirm the new row was recorded.", "success");
       } catch (submitError) {
         setStatus(`Submission failed: ${submitError.message}`);
       } finally {
