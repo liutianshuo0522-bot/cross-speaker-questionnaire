@@ -896,17 +896,37 @@
       setStatus("Submitting responses to the backend...");
 
       const form = document.getElementById("submissionForm");
+      const frame = document.getElementById("submissionFrame");
       const payloadField = document.getElementById("payloadField");
       payloadField.value = JSON.stringify(payload);
       form.action = SUBMISSION_ENDPOINT;
 
       try {
-        form.submit();
         const record = buildSubmissionRecord(payload);
-        redirectToSuccess(record);
+        let finished = false;
+
+        const finishSubmission = () => {
+          if (finished) return;
+          finished = true;
+          button.disabled = false;
+          redirectToSuccess(record);
+        };
+
+        const onFrameLoad = () => {
+          frame.removeEventListener("load", onFrameLoad);
+          window.clearTimeout(timeoutId);
+          finishSubmission();
+        };
+
+        frame.addEventListener("load", onFrameLoad, { once: true });
+        form.submit();
+
+        const timeoutId = window.setTimeout(() => {
+          frame.removeEventListener("load", onFrameLoad);
+          finishSubmission();
+        }, 2500);
       } catch (submitError) {
         setStatus(`Submission failed: ${submitError.message}`);
-      } finally {
         button.disabled = false;
       }
     }
