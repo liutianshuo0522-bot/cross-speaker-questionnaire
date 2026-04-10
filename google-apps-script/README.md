@@ -13,11 +13,18 @@ This folder contains the simplest backend for the questionnaire.
 1. Create a new Google Sheet.
 2. Open `Extensions > Apps Script`.
 3. Replace the default script with the contents of `Code.gs`.
-4. Click `Deploy > New deployment`.
-5. Choose `Web app`.
-6. Set access to `Anyone`.
-7. Copy the web app URL.
-8. Paste that URL into `config.js` as `submissionEndpoint`.
+4. Copy the Google Sheet ID from the sheet URL.
+5. In `Code.gs`, set:
+
+```js
+var SPREADSHEET_ID = "YOUR_SHEET_ID";
+```
+
+6. Click `Deploy > New deployment`.
+7. Choose `Web app`.
+8. Set access to `Anyone`.
+9. Copy the web app URL.
+10. Paste that URL into `config.js` as `submissionEndpoint`.
 
 Example:
 
@@ -32,4 +39,5 @@ window.QUESTIONNAIRE_CONFIG = {
 
 - The questionnaire sends one complete JSON payload on final submission.
 - The sheet stores summary columns plus the full JSON payload in the last column.
+- The script also writes backend errors to an `errors` sheet.
 - After editing `Code.gs`, redeploy the web app if Google Apps Script asks for a new version.
