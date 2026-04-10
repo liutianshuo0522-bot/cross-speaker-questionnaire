@@ -1,14 +1,13 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Cross-Speaker Emotion Transfer Questionnaire</title>
   <style>
     :root {
-      --bg: #f7f1e8;
       --paper: rgba(255, 250, 242, 0.9);
-      --card: rgba(255, 255, 255, 0.82);
+      --card: rgba(255, 255, 255, 0.84);
       --ink: #1f2b24;
       --muted: #5e675f;
       --line: rgba(31, 43, 36, 0.12);
@@ -25,7 +24,7 @@
 
     body {
       margin: 0;
-      font-family: "Avenir Next", "PingFang SC", "Segoe UI", sans-serif;
+      font-family: "Avenir Next", "Segoe UI", sans-serif;
       color: var(--ink);
       background:
         radial-gradient(circle at top left, rgba(226, 180, 76, 0.26), transparent 30%),
@@ -87,7 +86,7 @@
     h1 {
       font-size: clamp(2rem, 4vw, 3.4rem);
       line-height: 0.95;
-      max-width: 10ch;
+      max-width: 12ch;
     }
 
     h2 {
@@ -105,15 +104,21 @@
     }
 
     .lead {
-      max-width: 72ch;
+      max-width: 76ch;
       color: var(--muted);
       margin: 14px 0 0;
     }
 
-    .grid {
+    .grid,
+    .meta,
+    .compare-grid,
+    .audio-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
       gap: 14px;
+    }
+
+    .grid {
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       margin-top: 24px;
     }
 
@@ -134,9 +139,7 @@
     }
 
     .meta {
-      display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 14px;
     }
 
     label span {
@@ -171,9 +174,10 @@
       margin-bottom: 14px;
     }
 
-    .section-note {
+    .section-note,
+    .status,
+    .footer-note {
       color: var(--muted);
-      max-width: 72ch;
       margin: 0;
     }
 
@@ -201,6 +205,21 @@
       color: var(--muted);
     }
 
+    .alert {
+      margin-top: 16px;
+      padding: 14px 16px;
+      border-radius: 16px;
+      border: 1px solid rgba(198, 93, 53, 0.2);
+      background: rgba(198, 93, 53, 0.08);
+      color: #7a4029;
+    }
+
+    .alert.success {
+      border-color: rgba(47, 125, 98, 0.2);
+      background: rgba(47, 125, 98, 0.08);
+      color: #215946;
+    }
+
     details.trial {
       margin-top: 16px;
       overflow: hidden;
@@ -208,11 +227,6 @@
       opacity: 0;
       animation: rise 0.45s ease forwards;
     }
-
-    details.trial:nth-of-type(2) { animation-delay: 0.03s; }
-    details.trial:nth-of-type(3) { animation-delay: 0.06s; }
-    details.trial:nth-of-type(4) { animation-delay: 0.09s; }
-    details.trial:nth-of-type(5) { animation-delay: 0.12s; }
 
     @keyframes rise {
       to {
@@ -268,9 +282,7 @@
     }
 
     .audio-grid {
-      display: grid;
       grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 14px;
       margin-top: 16px;
     }
 
@@ -331,7 +343,7 @@
       background: rgba(255, 255, 255, 0.9);
       border: 1px solid rgba(31, 43, 36, 0.08);
       cursor: pointer;
-      transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+      transition: transform 0.15s ease;
     }
 
     .likert label:hover,
@@ -348,15 +360,14 @@
     .scale-note {
       display: flex;
       justify-content: space-between;
+      gap: 10px;
       margin-top: 8px;
       font-size: 0.8rem;
       color: var(--muted);
     }
 
     .compare-grid {
-      display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 14px;
       margin-top: 18px;
     }
 
@@ -371,6 +382,7 @@
       flex-wrap: wrap;
       gap: 12px;
       margin-top: 18px;
+      align-items: center;
     }
 
     .btn {
@@ -397,34 +409,10 @@
       border: 1px solid rgba(31, 43, 36, 0.08);
     }
 
-    .footer-note,
-    .status {
-      color: var(--muted);
-      font-size: 0.92rem;
-    }
-
-    .summary-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 14px;
-      background: rgba(255, 255, 255, 0.72);
-      border-radius: 18px;
-      overflow: hidden;
-    }
-
-    .summary-table th,
-    .summary-table td {
-      padding: 12px 10px;
-      border-bottom: 1px solid rgba(31, 43, 36, 0.08);
-      text-align: left;
-    }
-
-    .summary-table th {
-      background: rgba(47, 125, 98, 0.08);
-    }
-
-    .hidden {
-      display: none;
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
     }
 
     @media (max-width: 720px) {
@@ -451,43 +439,46 @@
   <div class="page">
     <section class="hero">
       <div class="pill">Question 2 · Cross-Speaker Emotional Transfer</div>
-      <h1>情感迁移听感问卷</h1>
+      <h1>Emotion Transfer Listening Questionnaire</h1>
       <p class="lead">
-        这个页面围绕两个研究假设展开：
-        `Hypothesis 2.a` 检验 emotional prefix token 是否学到了 Joyful 情感；
-        `Hypothesis 2.b` 检验在 cross-speaker 条件下，这种情感表示是否仍能稳定迁移，而不是被原始情感说话人的声学特征绑定。
+        This study evaluates whether a learned emotional representation can transfer joyful expression to different speakers.
+        Please listen carefully and rate each anonymous sample relative to the joyful reference.
       </p>
       <div class="grid">
-        <div class="pill">10 组句子</div>
-        <div class="pill">参考音频 + 匿名条件 A/B/C/D</div>
-        <div class="pill">支持自动保存、本地导出 JSON / CSV</div>
+        <div class="pill">10 utterances</div>
+        <div class="pill">Reference sample + 4 anonymous conditions</div>
+        <div class="pill">Direct submission to the research database</div>
       </div>
     </section>
 
     <section class="panel">
-      <h2>填写说明</h2>
+      <h2>Instructions</h2>
       <p class="section-note">
-        建议佩戴耳机，先听 `Reference Joyful`，再听匿名样本。网页会把作答保存在浏览器本地。所有条件都已匿名化，导出结果时会保留真实条件编码，方便你后续分析。
+        Please use headphones if possible. For each trial, listen to the reference joyful recording first, then evaluate the four anonymous samples.
+        Your progress is saved locally as a draft while you work. Only the final <strong>Submit Responses</strong> button sends your answers to the backend.
       </p>
+      <div id="endpointAlert" class="alert">
+        Submission is not configured yet. Add your backend endpoint in <code>config.js</code> before collecting responses online.
+      </div>
       <div class="meta">
         <label>
           <span>Participant ID</span>
-          <input type="text" id="participantId" placeholder="例如 P01" />
+          <input type="text" id="participantId" placeholder="e.g. P01" />
         </label>
         <label>
           <span>Listening Setup</span>
           <select id="listeningSetup">
-            <option value="">请选择</option>
+            <option value="">Select one</option>
             <option value="headphones">Headphones</option>
             <option value="earbuds">Earbuds</option>
-            <option value="laptop-speaker">Laptop Speaker</option>
-            <option value="desktop-speaker">Desktop Speaker</option>
+            <option value="laptop-speaker">Laptop speaker</option>
+            <option value="desktop-speaker">Desktop speaker</option>
             <option value="other">Other</option>
           </select>
         </label>
         <label>
           <span>Overall Notes</span>
-          <textarea id="overallNotes" placeholder="可记录整体印象、异常样本、听感策略等"></textarea>
+          <textarea id="overallNotes" placeholder="Optional notes about unusual samples, listening strategy, or general impressions"></textarea>
         </label>
       </div>
     </section>
@@ -495,9 +486,9 @@
     <section class="panel">
       <div class="section-header">
         <div>
-          <h2>Section A · Hypothesis 2.a</h2>
+          <h2>Section A · Sample-Level Ratings</h2>
           <p class="section-note">
-            目标：判断匿名样本是否表现出清晰、自然、且与参考 Joyful 相一致的情感特征。
+            Rate how joyful each sample sounds, how closely it matches the emotional character of the reference, and how natural it sounds overall.
           </p>
         </div>
         <div class="progress">
@@ -511,67 +502,49 @@
     <section class="panel">
       <h2>Section B · Overall Hypothesis Judgement</h2>
       <p class="section-note">
-        这一部分不看单句，而是基于你听过的全部样本，对两个研究假设做整体判断。
+        Based on all the samples you heard, indicate your overall agreement with the following statements.
       </p>
       <div class="compare-grid">
         <div class="compare-box">
-          <div class="question-title">G1. emotional prefix token 本身已经学到了足够清晰的 Joyful 信息，可以作为一种有效的情感控制方式。</div>
+          <div class="question-title">G1. The emotional prefix token has learned sufficiently clear joyful information and can serve as an effective emotion control mechanism.</div>
           <div id="globalH2a"></div>
         </div>
         <div class="compare-box">
-          <div class="question-title">G2. 与 speaker-dependent 条件相比，cross-speaker 条件下的情感迁移明显更弱。</div>
+          <div class="question-title">G2. Emotional transfer is clearly weaker under the cross-speaker condition than under a speaker-dependent condition.</div>
           <div id="globalH2bWeakness"></div>
         </div>
         <div class="compare-box">
-          <div class="question-title">G3. 在 cross-speaker 条件下，情感表达仍然部分绑定在原始情感说话人的声学特征上。</div>
+          <div class="question-title">G3. Under the cross-speaker condition, emotional expression still appears partially coupled to the acoustic characteristics of the original emotional speaker.</div>
           <div id="globalH2bCoupling"></div>
         </div>
         <div class="compare-box">
           <div class="question-title">G4. Overall interpretation note</div>
-          <textarea id="globalComment" placeholder="可写下你对 H2.a / H2.b 的整体判断依据"></textarea>
+          <textarea id="globalComment" placeholder="Optional comments supporting your overall judgement"></textarea>
         </div>
       </div>
     </section>
 
     <section class="panel">
-      <h2>Section C · Export</h2>
+      <h2>Final Submission</h2>
       <p class="section-note">
-        导出前不需要全部答完。`JSON` 更完整，`CSV` 适合直接汇总到表格软件里。
+        Drafts are stored locally while you are filling out the questionnaire. When you are finished, click submit once. The page will send one JSON record to the backend for aggregation.
       </p>
       <div class="toolbar">
-        <button class="btn" id="saveBtn" type="button">保存到浏览器</button>
-        <button class="btn alt" id="jsonBtn" type="button">导出 JSON</button>
-        <button class="btn alt" id="csvBtn" type="button">导出 CSV</button>
-        <button class="btn ghost" id="summaryBtn" type="button">刷新条件汇总</button>
-        <button class="btn ghost" id="resetBtn" type="button">清空当前作答</button>
+        <button class="btn ghost" id="saveBtn" type="button">Save Draft Locally</button>
+        <button class="btn alt" id="submitBtn" type="button">Submit Responses</button>
+        <button class="btn ghost" id="resetBtn" type="button">Clear Local Draft</button>
       </div>
-      <p class="status" id="statusText">尚未保存。</p>
-
-      <div id="summaryPanel" class="hidden">
-        <h3>匿名条件平均分</h3>
-        <p class="footer-note">
-          下表是根据已填写项目自动计算的均值，用于快速检查哪一类条件整体更强。`Actual Condition` 列保留真实目录名，便于你后续对照分析。
-        </p>
-        <table class="summary-table">
-          <thead>
-            <tr>
-              <th>Blind Label</th>
-              <th>Actual Condition</th>
-              <th>Joy Avg</th>
-              <th>Reference Match Avg</th>
-              <th>Naturalness Avg</th>
-            </tr>
-          </thead>
-          <tbody id="summaryBody"></tbody>
-        </table>
-      </div>
+      <p class="status" id="statusText">Draft not saved yet.</p>
     </section>
   </div>
 
+  <script src="./config.js"></script>
   <script>
-    const STORAGE_KEY = "cross-speaker-questionnaire-v1";
-
-    const basePath = ".";
+    const STORAGE_KEY = "cross-speaker-questionnaire-v2";
+    const APP_CONFIG = window.QUESTIONNAIRE_CONFIG || {};
+    const SUBMISSION_ENDPOINT = APP_CONFIG.submissionEndpoint || "";
+    const PROJECT_NAME = APP_CONFIG.projectName || "cross-speaker-questionnaire";
+    const state = loadState();
 
     const trials = [
       {
@@ -687,7 +660,6 @@
     ];
 
     const blindLabels = ["Sample A", "Sample B", "Sample C", "Sample D"];
-    const state = loadState();
 
     function loadState() {
       try {
@@ -697,14 +669,18 @@
       }
     }
 
-    function saveState() {
+    function saveState(silent = false) {
       const payload = collectResponses();
       localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
-      setStatus("已保存到浏览器本地。");
+      if (!silent) {
+        setStatus("Draft saved locally.");
+      }
     }
 
-    function setStatus(text) {
-      document.getElementById("statusText").textContent = text;
+    function setStatus(text, mode = "") {
+      const node = document.getElementById("statusText");
+      node.textContent = text;
+      node.className = `status ${mode}`.trim();
     }
 
     function shuffleSeeded(items, seedString) {
@@ -765,10 +741,8 @@
         );
 
         const savedTrial = state.trials?.[trial.id] || {};
-        const detailOpen = index === 0 ? "open" : "";
-
         return `
-          <details class="trial" ${detailOpen}>
+          <details class="trial" ${index === 0 ? "open" : ""}>
             <summary>
               <div class="trial-title">
                 <div class="trial-id">${trial.id}</div>
@@ -778,8 +752,8 @@
             </summary>
             <div class="trial-body" data-trial-id="${trial.id}">
               <div class="reference-box">
-                <h3>Reference Joyful</h3>
-                <p class="footer-note">请先听这一条，作为本题 Joyful 情感的参考。</p>
+                <h3>Reference Joyful Sample</h3>
+                <p class="footer-note">Please listen to the joyful reference before rating the anonymous samples.</p>
                 <audio controls preload="none" src="${encodePath(trial.reference)}"></audio>
               </div>
 
@@ -792,18 +766,18 @@
                       <audio controls preload="none" src="${encodePath(sample.path)}"></audio>
 
                       <div class="question-block">
-                        <div class="question-title">A1. 这条语音听起来有多 Joyful？</div>
-                        ${likertHTML(`${trial.id}_${sample.blind}_joy`, "1 = 完全不 Joyful", "7 = 非常 Joyful", sampleState.joy)}
+                        <div class="question-title">A1. How joyful does this sample sound?</div>
+                        ${likertHTML(`${trial.id}_${sample.blind}_joy`, "1 = Not joyful at all", "7 = Extremely joyful", sampleState.joy)}
                       </div>
 
                       <div class="question-block">
-                        <div class="question-title">A2. 这条语音与参考 Joyful 的情感一致性有多高？</div>
-                        ${likertHTML(`${trial.id}_${sample.blind}_match`, "1 = 很不一致", "7 = 非常一致", sampleState.match)}
+                        <div class="question-title">A2. How closely does this sample match the emotional character of the reference joyful sample?</div>
+                        ${likertHTML(`${trial.id}_${sample.blind}_match`, "1 = Very different", "7 = Very similar", sampleState.match)}
                       </div>
 
                       <div class="question-block">
-                        <div class="question-title">A3. 这条语音整体自然度如何？</div>
-                        ${likertHTML(`${trial.id}_${sample.blind}_naturalness`, "1 = 很不自然", "7 = 很自然", sampleState.naturalness)}
+                        <div class="question-title">A3. How natural does this sample sound overall?</div>
+                        ${likertHTML(`${trial.id}_${sample.blind}_naturalness`, "1 = Very unnatural", "7 = Very natural", sampleState.naturalness)}
                       </div>
                     </article>
                   `;
@@ -812,7 +786,7 @@
 
               <div class="compare-grid">
                 <div class="compare-box">
-                  <div class="question-title">B1. 哪个匿名样本最成功地完成了 Joyful 情感迁移？</div>
+                  <div class="question-title">B1. Which anonymous sample achieved the most successful joyful emotion transfer?</div>
                   ${choiceHTML(
                     `${trial.id}_best_transfer`,
                     randomizedSamples.map((sample) => ({ label: sample.blind, value: sample.blind })),
@@ -820,7 +794,7 @@
                   )}
                 </div>
                 <div class="compare-box">
-                  <div class="question-title">B2. 哪个匿名样本最像“情感还绑定在原始说话人上”，而不是稳定迁移？</div>
+                  <div class="question-title">B2. Which anonymous sample sounded the most coupled to the original emotional speaker rather than showing stable transfer?</div>
                   ${choiceHTML(
                     `${trial.id}_most_coupled`,
                     randomizedSamples.map((sample) => ({ label: sample.blind, value: sample.blind })),
@@ -828,12 +802,12 @@
                   )}
                 </div>
                 <div class="compare-box">
-                  <div class="question-title">B3. 你认为这一句的 cross-speaker emotional transfer 总体有多成功？</div>
-                  ${likertHTML(`${trial.id}_overall_transfer`, "1 = 基本失败", "7 = 非常成功", savedTrial.overallTransfer)}
+                  <div class="question-title">B3. How successful was the cross-speaker emotion transfer for this utterance overall?</div>
+                  ${likertHTML(`${trial.id}_overall_transfer`, "1 = Not successful", "7 = Very successful", savedTrial.overallTransfer)}
                 </div>
                 <div class="compare-box">
-                  <div class="question-title">B4. 备注</div>
-                  <textarea name="${trial.id}_comment" placeholder="例如：哪一条更像在模仿原始情感说话人、哪一条情感明显但不自然等">${savedTrial.comment || ""}</textarea>
+                  <div class="question-title">B4. Optional trial note</div>
+                  <textarea name="${trial.id}_comment" placeholder="Optional note about speaker coupling, emotional clarity, or naturalness">${savedTrial.comment || ""}</textarea>
                 </div>
               </div>
             </div>
@@ -846,20 +820,20 @@
       const global = state.global || {};
       document.getElementById("globalH2a").innerHTML = likertHTML(
         "global_h2a",
-        "1 = 强烈不同意",
-        "7 = 强烈同意",
+        "1 = Strongly disagree",
+        "7 = Strongly agree",
         global.h2a || ""
       );
       document.getElementById("globalH2bWeakness").innerHTML = likertHTML(
         "global_h2b_weakness",
-        "1 = 强烈不同意",
-        "7 = 强烈同意",
+        "1 = Strongly disagree",
+        "7 = Strongly agree",
         global.h2bWeakness || ""
       );
       document.getElementById("globalH2bCoupling").innerHTML = likertHTML(
         "global_h2b_coupling",
-        "1 = 强烈不同意",
-        "7 = 强烈同意",
+        "1 = Strongly disagree",
+        "7 = Strongly agree",
         global.h2bCoupling || ""
       );
       document.getElementById("globalComment").value = global.comment || "";
@@ -867,10 +841,12 @@
 
     function collectResponses() {
       const meta = {
+        projectName: PROJECT_NAME,
         participantId: document.getElementById("participantId").value.trim(),
         listeningSetup: document.getElementById("listeningSetup").value,
         overallNotes: document.getElementById("overallNotes").value.trim(),
-        exportedAt: new Date().toISOString()
+        clientTimestamp: new Date().toISOString(),
+        pageUrl: window.location.href
       };
 
       const global = {
@@ -888,16 +864,11 @@
 
         trialEl.querySelectorAll(".sample-card").forEach((sampleEl) => {
           const blind = sampleEl.dataset.blind;
-          const actual = sampleEl.dataset.actual;
-          const joy = trialEl.querySelector(`input[name="${trialId}_${blind}_joy"]:checked`)?.value || "";
-          const match = trialEl.querySelector(`input[name="${trialId}_${blind}_match"]:checked`)?.value || "";
-          const naturalness = trialEl.querySelector(`input[name="${trialId}_${blind}_naturalness"]:checked`)?.value || "";
-
           samples[blind] = {
-            actual,
-            joy,
-            match,
-            naturalness
+            actual: sampleEl.dataset.actual,
+            joy: trialEl.querySelector(`input[name="${trialId}_${blind}_joy"]:checked`)?.value || "",
+            match: trialEl.querySelector(`input[name="${trialId}_${blind}_match"]:checked`)?.value || "",
+            naturalness: trialEl.querySelector(`input[name="${trialId}_${blind}_naturalness"]:checked`)?.value || ""
           };
         });
 
@@ -916,7 +887,7 @@
 
     function updateProgress() {
       const totalQuestions =
-        document.querySelectorAll('.sample-card').length * 3 +
+        document.querySelectorAll(".sample-card").length * 3 +
         trials.length * 3 +
         trials.length +
         3 +
@@ -927,130 +898,8 @@
         Array.from(document.querySelectorAll('.compare-box textarea')).filter((textarea) => textarea.value.trim()).length;
 
       const pct = totalQuestions ? Math.round((answered / totalQuestions) * 100) : 0;
-
       document.getElementById("progressFill").style.width = `${pct}%`;
       document.getElementById("progressText").textContent = `${answered} / ${totalQuestions} answered`;
-    }
-
-    function downloadFile(filename, content, type) {
-      const blob = new Blob([content], { type });
-      const link = document.createElement("a");
-      link.href = URL.createObjectURL(blob);
-      link.download = filename;
-      link.click();
-      URL.revokeObjectURL(link.href);
-    }
-
-    function exportJSON() {
-      const data = collectResponses();
-      downloadFile(
-        `${data.meta.participantId || "participant"}_cross_speaker_questionnaire.json`,
-        JSON.stringify(data, null, 2),
-        "application/json"
-      );
-      setStatus("JSON 已导出。");
-    }
-
-    function csvEscape(value) {
-      const text = String(value ?? "");
-      return `"${text.replaceAll('"', '""')}"`;
-    }
-
-    function exportCSV() {
-      const data = collectResponses();
-      const rows = [[
-        "participant_id",
-        "listening_setup",
-        "overall_notes",
-        "global_h2a",
-        "global_h2b_weakness",
-        "global_h2b_coupling",
-        "global_comment",
-        "trial_id",
-        "trial_text",
-        "blind_label",
-        "actual_condition",
-        "joy",
-        "reference_match",
-        "naturalness",
-        "best_transfer",
-        "most_coupled",
-        "overall_transfer",
-        "trial_comment"
-      ]];
-
-      Object.entries(data.trials).forEach(([trialId, trialData]) => {
-        Object.entries(trialData.samples).forEach(([blind, sampleData]) => {
-          rows.push([
-            data.meta.participantId,
-            data.meta.listeningSetup,
-            data.meta.overallNotes,
-            data.global.h2a,
-            data.global.h2bWeakness,
-            data.global.h2bCoupling,
-            data.global.comment,
-            trialId,
-            trialData.text,
-            blind,
-            sampleData.actual,
-            sampleData.joy,
-            sampleData.match,
-            sampleData.naturalness,
-            trialData.bestTransfer,
-            trialData.mostCoupled,
-            trialData.overallTransfer,
-            trialData.comment
-          ]);
-        });
-      });
-
-      const csv = rows.map((row) => row.map(csvEscape).join(",")).join("\n");
-      downloadFile(
-        `${data.meta.participantId || "participant"}_cross_speaker_questionnaire.csv`,
-        csv,
-        "text/csv;charset=utf-8"
-      );
-      setStatus("CSV 已导出。");
-    }
-
-    function refreshSummary() {
-      const data = collectResponses();
-      const aggregates = {};
-
-      Object.values(data.trials).forEach((trialData) => {
-        Object.entries(trialData.samples).forEach(([blind, sample]) => {
-          if (!aggregates[blind]) {
-            aggregates[blind] = {
-              actual: sample.actual,
-              joy: [],
-              match: [],
-              naturalness: []
-            };
-          }
-
-          if (sample.joy) aggregates[blind].joy.push(Number(sample.joy));
-          if (sample.match) aggregates[blind].match.push(Number(sample.match));
-          if (sample.naturalness) aggregates[blind].naturalness.push(Number(sample.naturalness));
-        });
-      });
-
-      const body = document.getElementById("summaryBody");
-      const rows = Object.entries(aggregates).map(([blind, value]) => {
-        const avg = (items) => items.length ? (items.reduce((sum, item) => sum + item, 0) / items.length).toFixed(2) : "-";
-        return `
-          <tr>
-            <td>${blind}</td>
-            <td>${value.actual}</td>
-            <td>${avg(value.joy)}</td>
-            <td>${avg(value.match)}</td>
-            <td>${avg(value.naturalness)}</td>
-          </tr>
-        `;
-      }).join("");
-
-      body.innerHTML = rows || `<tr><td colspan="5">还没有可统计的数据。</td></tr>`;
-      document.getElementById("summaryPanel").classList.remove("hidden");
-      setStatus("条件汇总已刷新。");
     }
 
     function restoreMeta() {
@@ -1060,27 +909,87 @@
       document.getElementById("overallNotes").value = state.meta.overallNotes || "";
     }
 
+    function validateSubmission(data) {
+      if (!data.meta.participantId) {
+        return "Please enter a participant ID before submitting.";
+      }
+      if (!data.meta.listeningSetup) {
+        return "Please select a listening setup before submitting.";
+      }
+      if (!SUBMISSION_ENDPOINT) {
+        return "Submission endpoint is not configured yet.";
+      }
+      return "";
+    }
+
+    async function submitResponses() {
+      const button = document.getElementById("submitBtn");
+      const payload = collectResponses();
+      const error = validateSubmission(payload);
+      if (error) {
+        setStatus(error);
+        return;
+      }
+
+      button.disabled = true;
+      setStatus("Submitting responses to the backend...");
+
+      try {
+        const response = await fetch(SUBMISSION_ENDPOINT, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(payload)
+        });
+
+        const text = await response.text();
+        if (!response.ok) {
+          throw new Error(text || `Request failed with status ${response.status}`);
+        }
+
+        localStorage.setItem(`${STORAGE_KEY}:submitted`, JSON.stringify({
+          participantId: payload.meta.participantId,
+          submittedAt: new Date().toISOString()
+        }));
+        setStatus("Responses submitted successfully. Thank you for participating.", "success");
+      } catch (submitError) {
+        setStatus(`Submission failed: ${submitError.message}`);
+      } finally {
+        button.disabled = false;
+      }
+    }
+
     function attachEvents() {
       document.body.addEventListener("change", () => {
         updateProgress();
-        saveState();
+        saveState(true);
       });
 
       document.body.addEventListener("input", () => {
         updateProgress();
-        saveState();
+        saveState(true);
       });
 
-      document.getElementById("saveBtn").addEventListener("click", saveState);
-      document.getElementById("jsonBtn").addEventListener("click", exportJSON);
-      document.getElementById("csvBtn").addEventListener("click", exportCSV);
-      document.getElementById("summaryBtn").addEventListener("click", refreshSummary);
-
+      document.getElementById("saveBtn").addEventListener("click", () => saveState(false));
+      document.getElementById("submitBtn").addEventListener("click", submitResponses);
       document.getElementById("resetBtn").addEventListener("click", () => {
-        if (!window.confirm("确定要清空当前浏览器中的所有作答吗？")) return;
+        if (!window.confirm("Clear the local draft stored in this browser?")) return;
         localStorage.removeItem(STORAGE_KEY);
+        localStorage.removeItem(`${STORAGE_KEY}:submitted`);
         window.location.reload();
       });
+    }
+
+    function initEndpointNotice() {
+      const alert = document.getElementById("endpointAlert");
+      if (!SUBMISSION_ENDPOINT) {
+        document.getElementById("submitBtn").disabled = true;
+        return;
+      }
+
+      alert.textContent = `Connected to backend submission endpoint for ${PROJECT_NAME}.`;
+      alert.classList.add("success");
     }
 
     renderTrials();
@@ -1088,6 +997,7 @@
     restoreMeta();
     attachEvents();
     updateProgress();
+    initEndpointNotice();
   </script>
 </body>
 </html>
