@@ -59,23 +59,16 @@ function doPost(e) {
       "overall_notes",
       "client_timestamp",
       "page_url",
-      "global_h2a",
-      "global_h2b_weakness",
-      "global_h2b_coupling",
-      "global_comment",
       "trial_id",
-      "hypothesis",
+      "task",
       "trial_text",
       "blind_label",
       "actual_model",
       "display_order",
-      "joy",
-      "match",
-      "transfer",
-      "coupling",
-      "best_sample",
-      "overall_trial_score",
-      "trial_comment"
+      "joyfulness",
+      "naturalness",
+      "more_joyful_sample",
+      "more_identity_leakage_sample"
     ]);
 
     var rawSheet = getOrCreateSheet_(RAW_SHEET_NAME, [
@@ -96,10 +89,6 @@ function doPost(e) {
     var overallNotes = payload.meta && payload.meta.overallNotes ? payload.meta.overallNotes : "";
     var clientTimestamp = payload.meta && payload.meta.clientTimestamp ? payload.meta.clientTimestamp : "";
     var pageUrl = payload.meta && payload.meta.pageUrl ? payload.meta.pageUrl : "";
-    var globalH2a = payload.global && payload.global.h2a ? payload.global.h2a : "";
-    var globalH2bWeakness = payload.global && payload.global.h2bWeakness ? payload.global.h2bWeakness : "";
-    var globalH2bCoupling = payload.global && payload.global.h2bCoupling ? payload.global.h2bCoupling : "";
-    var globalComment = payload.global && payload.global.comment ? payload.global.comment : "";
 
     Object.keys(payload.trials || {}).forEach(function(trialId) {
       var trial = payload.trials[trialId] || {};
@@ -114,23 +103,16 @@ function doPost(e) {
           overallNotes,
           clientTimestamp,
           pageUrl,
-          globalH2a,
-          globalH2bWeakness,
-          globalH2bCoupling,
-          globalComment,
           trialId,
-          trial.hypothesis || "",
+          trial.task || "",
           trial.text || "",
           blindLabel,
           sample.actual || "",
           sample.displayOrder || "",
-          sample.joy || "",
-          sample.match || "",
-          sample.transfer || "",
-          sample.coupling || "",
-          trial.bestSample || "",
-          trial.overall || "",
-          trial.comment || ""
+          sample.joyfulness || "",
+          sample.naturalness || "",
+          trial.moreJoyful || "",
+          trial.moreLeakage || ""
         ]);
       });
     });
