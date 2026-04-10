@@ -18,9 +18,7 @@
       --radius: 22px;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
@@ -84,9 +82,9 @@
     }
 
     h1 {
-      font-size: clamp(2rem, 4vw, 3.4rem);
+      font-size: clamp(2rem, 4vw, 3.3rem);
       line-height: 0.95;
-      max-width: 12ch;
+      max-width: 13ch;
     }
 
     h2 {
@@ -95,18 +93,23 @@
     }
 
     h3 {
-      font-size: 1.1rem;
+      font-size: 1.12rem;
       margin-bottom: 12px;
     }
 
-    p {
-      line-height: 1.6;
+    p { line-height: 1.6; }
+
+    .lead,
+    .section-note,
+    .footer-note,
+    .status {
+      color: var(--muted);
+      margin: 0;
     }
 
     .lead {
       max-width: 76ch;
-      color: var(--muted);
-      margin: 14px 0 0;
+      margin-top: 14px;
     }
 
     .grid,
@@ -120,6 +123,20 @@
     .grid {
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       margin-top: 24px;
+    }
+
+    .meta {
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+
+    .audio-grid {
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      margin-top: 16px;
+    }
+
+    .compare-grid {
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      margin-top: 18px;
     }
 
     .pill {
@@ -136,10 +153,6 @@
     .panel {
       padding: 22px;
       margin-top: 18px;
-    }
-
-    .meta {
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     }
 
     label span {
@@ -161,7 +174,7 @@
     }
 
     textarea {
-      min-height: 96px;
+      min-height: 92px;
       resize: vertical;
     }
 
@@ -172,13 +185,6 @@
       align-items: end;
       flex-wrap: wrap;
       margin-bottom: 14px;
-    }
-
-    .section-note,
-    .status,
-    .footer-note {
-      color: var(--muted);
-      margin: 0;
     }
 
     .progress {
@@ -220,19 +226,21 @@
       color: #215946;
     }
 
+    .hypothesis-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: rgba(47, 125, 98, 0.12);
+      color: var(--accent-2);
+      font-size: 0.88rem;
+      font-weight: 700;
+    }
+
     details.trial {
       margin-top: 16px;
       overflow: hidden;
-      transform: translateY(10px);
-      opacity: 0;
-      animation: rise 0.45s ease forwards;
-    }
-
-    @keyframes rise {
-      to {
-        transform: translateY(0);
-        opacity: 1;
-      }
     }
 
     summary {
@@ -281,11 +289,6 @@
       border: 1px solid rgba(198, 93, 53, 0.14);
     }
 
-    .audio-grid {
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      margin-top: 16px;
-    }
-
     .sample-card,
     .compare-box {
       padding: 16px;
@@ -329,7 +332,7 @@
 
     .likert {
       display: grid;
-      grid-template-columns: repeat(7, minmax(0, 1fr));
+      grid-template-columns: repeat(5, minmax(0, 1fr));
       gap: 6px;
     }
 
@@ -343,18 +346,6 @@
       background: rgba(255, 255, 255, 0.9);
       border: 1px solid rgba(31, 43, 36, 0.08);
       cursor: pointer;
-      transition: transform 0.15s ease;
-    }
-
-    .likert label:hover,
-    .choices label:hover,
-    .btn:hover {
-      transform: translateY(-1px);
-    }
-
-    .likert input,
-    .choices input {
-      margin: 0;
     }
 
     .scale-note {
@@ -364,11 +355,6 @@
       margin-top: 8px;
       font-size: 0.8rem;
       color: var(--muted);
-    }
-
-    .compare-grid {
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      margin-top: 18px;
     }
 
     .choices {
@@ -412,7 +398,6 @@
     .btn:disabled {
       opacity: 0.6;
       cursor: not-allowed;
-      transform: none;
     }
 
     @media (max-width: 720px) {
@@ -430,7 +415,7 @@
       }
 
       .likert {
-        grid-template-columns: repeat(4, minmax(0, 1fr));
+        grid-template-columns: repeat(5, minmax(0, 1fr));
       }
     }
   </style>
@@ -441,21 +426,22 @@
       <div class="pill">Question 2 · Cross-Speaker Emotional Transfer</div>
       <h1>Emotion Transfer Listening Questionnaire</h1>
       <p class="lead">
-        This study evaluates whether a learned emotional representation can transfer joyful expression to different speakers.
-        Please listen carefully and rate each anonymous sample relative to the joyful reference.
+        This questionnaire has been simplified to make evaluation easier.
+        All rating scales use 1 to 5, and the experiment is split into two parts:
+        five utterances for Hypothesis 2.a and five utterances for Hypothesis 2.b.
       </p>
       <div class="grid">
-        <div class="pill">10 utterances</div>
-        <div class="pill">Reference sample + 4 anonymous conditions</div>
-        <div class="pill">Direct submission to the research database</div>
+        <div class="pill">10 utterances total</div>
+        <div class="pill">5 utterances for H2.a + 5 utterances for H2.b</div>
+        <div class="pill">Each response stores the true model ID in the backend payload</div>
       </div>
     </section>
 
     <section class="panel">
       <h2>Instructions</h2>
       <p class="section-note">
-        Please use headphones if possible. For each trial, listen to the reference joyful recording first, then evaluate the four anonymous samples.
-        Your progress is saved locally as a draft while you work. Only the final <strong>Submit Responses</strong> button sends your answers to the backend.
+        Please use headphones if possible. Samples are shown anonymously to participants, but the submitted payload always records
+        the blind label, true model name, hypothesis section, and display order for every sample.
       </p>
       <div id="endpointAlert" class="alert">
         Submission is not configured yet. Add your backend endpoint in <code>config.js</code> before collecting responses online.
@@ -478,7 +464,7 @@
         </label>
         <label>
           <span>Overall Notes</span>
-          <textarea id="overallNotes" placeholder="Optional notes about unusual samples, listening strategy, or general impressions"></textarea>
+          <textarea id="overallNotes" placeholder="Optional notes about unusual samples or general impressions"></textarea>
         </label>
       </div>
     </section>
@@ -486,9 +472,10 @@
     <section class="panel">
       <div class="section-header">
         <div>
-          <h2>Section A · Sample-Level Ratings</h2>
+          <div class="hypothesis-tag">Hypothesis 2.a</div>
+          <h2>Does the prefix token clearly express Joyful information?</h2>
           <p class="section-note">
-            Rate how joyful each sample sounds, how closely it matches the emotional character of the reference, and how natural it sounds overall.
+            For these five utterances, judge whether the samples sound joyful and whether they match the emotional reference.
           </p>
         </div>
         <div class="progress">
@@ -496,30 +483,40 @@
           <div class="progress-text" id="progressText">0 / 0 answered</div>
         </div>
       </div>
-      <div id="trialContainer"></div>
+      <div id="h2aContainer"></div>
     </section>
 
     <section class="panel">
-      <h2>Section B · Overall Hypothesis Judgement</h2>
-      <p class="section-note">
-        Based on all the samples you heard, indicate your overall agreement with the following statements.
-      </p>
+      <div class="section-header">
+        <div>
+          <div class="hypothesis-tag">Hypothesis 2.b</div>
+          <h2>How limited is cross-speaker transfer?</h2>
+          <p class="section-note">
+            For these five utterances, judge transfer success and whether emotion still sounds tied to the original emotional speaker.
+          </p>
+        </div>
+      </div>
+      <div id="h2bContainer"></div>
+    </section>
+
+    <section class="panel">
+      <h2>Overall Hypothesis Judgement</h2>
       <div class="compare-grid">
         <div class="compare-box">
-          <div class="question-title">G1. The emotional prefix token has learned sufficiently clear joyful information and can serve as an effective emotion control mechanism.</div>
+          <div class="question-title">G1. The emotional prefix token has learned clear joyful information and can work as an effective control mechanism.</div>
           <div id="globalH2a"></div>
         </div>
         <div class="compare-box">
-          <div class="question-title">G2. Emotional transfer is clearly weaker under the cross-speaker condition than under a speaker-dependent condition.</div>
+          <div class="question-title">G2. Cross-speaker emotional transfer is weaker than speaker-dependent emotional transfer.</div>
           <div id="globalH2bWeakness"></div>
         </div>
         <div class="compare-box">
-          <div class="question-title">G3. Under the cross-speaker condition, emotional expression still appears partially coupled to the acoustic characteristics of the original emotional speaker.</div>
+          <div class="question-title">G3. In cross-speaker conditions, the emotional expression still sounds partially coupled to the original emotional speaker.</div>
           <div id="globalH2bCoupling"></div>
         </div>
         <div class="compare-box">
-          <div class="question-title">G4. Overall interpretation note</div>
-          <textarea id="globalComment" placeholder="Optional comments supporting your overall judgement"></textarea>
+          <div class="question-title">G4. Optional overall note</div>
+          <textarea id="globalComment" placeholder="Optional note about your overall judgement"></textarea>
         </div>
       </div>
     </section>
@@ -527,7 +524,7 @@
     <section class="panel">
       <h2>Final Submission</h2>
       <p class="section-note">
-        Drafts are stored locally while you are filling out the questionnaire. When you are finished, click submit once. The page will send one JSON record to the backend for aggregation.
+        Drafts are stored locally while participants work. The final submission sends one JSON payload to the backend.
       </p>
       <div class="toolbar">
         <button class="btn ghost" id="saveBtn" type="button">Save Draft Locally</button>
@@ -545,15 +542,16 @@
 
   <script src="./config.js"></script>
   <script>
-    const STORAGE_KEY = "cross-speaker-questionnaire-v2";
+    const STORAGE_KEY = "cross-speaker-questionnaire-v3";
     const APP_CONFIG = window.QUESTIONNAIRE_CONFIG || {};
     const SUBMISSION_ENDPOINT = APP_CONFIG.submissionEndpoint || "";
     const PROJECT_NAME = APP_CONFIG.projectName || "cross-speaker-questionnaire";
     const state = loadState();
 
-    const trials = [
+    const baseTrials = [
       {
         id: "T01",
+        hypothesis: "H2a",
         text: "Everything is going so well today",
         reference: "./Tess_Joyful/Everything is going so well today.wav",
         samples: [
@@ -565,6 +563,7 @@
       },
       {
         id: "T02",
+        hypothesis: "H2a",
         text: "I am so happy to see you here",
         reference: "./Tess_Joyful/ I am so happy to see you here.wav",
         samples: [
@@ -576,6 +575,7 @@
       },
       {
         id: "T03",
+        hypothesis: "H2a",
         text: "I cannot believe how perfectly",
         reference: "./Tess_Joyful/ I cannot believe how perfectly.wav",
         samples: [
@@ -587,6 +587,7 @@
       },
       {
         id: "T04",
+        hypothesis: "H2a",
         text: "I had such a lovely time",
         reference: "./Tess_Joyful/I had such a lovely time.wav",
         samples: [
@@ -598,6 +599,7 @@
       },
       {
         id: "T05",
+        hypothesis: "H2a",
         text: "Let us celebrate together",
         reference: "./Tess_Joyful/Let us celebrate together.wav",
         samples: [
@@ -609,6 +611,7 @@
       },
       {
         id: "T06",
+        hypothesis: "H2b",
         text: "Thank you so much Tess Joyful",
         reference: "./Tess_Joyful/Thank you so much Tess Joyful.wav",
         samples: [
@@ -620,6 +623,7 @@
       },
       {
         id: "T07",
+        hypothesis: "H2b",
         text: "That is wonderful news",
         reference: "./Tess_Joyful/That is wonderful news.wav",
         samples: [
@@ -631,6 +635,7 @@
       },
       {
         id: "T08",
+        hypothesis: "H2b",
         text: "This little surprise was amazing",
         reference: "./Tess_Joyful/ This little surprise was amazing.wav",
         samples: [
@@ -642,6 +647,7 @@
       },
       {
         id: "T09",
+        hypothesis: "H2b",
         text: "We finally made it",
         reference: "./Tess_Joyful/We finally made it.wav",
         samples: [
@@ -653,6 +659,7 @@
       },
       {
         id: "T10",
+        hypothesis: "H2b",
         text: "What a beautiful morning",
         reference: "./Tess_Joyful/What a beautiful morning.wav",
         samples: [
@@ -665,6 +672,20 @@
     ];
 
     const blindLabels = ["Sample A", "Sample B", "Sample C", "Sample D"];
+    const preparedTrials = baseTrials.map((trial) => {
+      const randomizedSamples = shuffleSeeded(
+        trial.samples.map((sample, sampleIndex) => ({
+          ...sample,
+          blind: blindLabels[sampleIndex]
+        })),
+        trial.id
+      ).map((sample, index) => ({
+        ...sample,
+        displayOrder: index + 1
+      }));
+
+      return { ...trial, randomizedSamples };
+    });
 
     function loadState() {
       try {
@@ -677,9 +698,7 @@
     function saveState(silent = false) {
       const payload = collectResponses();
       localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
-      if (!silent) {
-        setStatus("Draft saved locally.");
-      }
+      if (!silent) setStatus("Draft saved locally.");
     }
 
     function setStatus(text, mode = "") {
@@ -704,7 +723,7 @@
     }
 
     function likertHTML(name, left, right, savedValue) {
-      const values = [1, 2, 3, 4, 5, 6, 7];
+      const values = [1, 2, 3, 4, 5];
       return `
         <div class="likert">
           ${values.map((value) => `
@@ -734,18 +753,12 @@
       `;
     }
 
-    function renderTrials() {
-      const container = document.getElementById("trialContainer");
+    function renderTrialsForHypothesis(hypothesis, containerId) {
+      const container = document.getElementById(containerId);
+      const trials = preparedTrials.filter((trial) => trial.hypothesis === hypothesis);
       container.innerHTML = trials.map((trial, index) => {
-        const randomizedSamples = shuffleSeeded(
-          trial.samples.map((sample, sampleIndex) => ({
-            ...sample,
-            blind: blindLabels[sampleIndex]
-          })),
-          trial.id
-        );
-
         const savedTrial = state.trials?.[trial.id] || {};
+
         return `
           <details class="trial" ${index === 0 ? "open" : ""}>
             <summary>
@@ -753,37 +766,45 @@
                 <div class="trial-id">${trial.id}</div>
                 <div class="trial-text">${trial.text}</div>
               </div>
-              <div class="pill">4 anonymous conditions</div>
+              <div class="pill">${hypothesis} · 4 anonymous conditions</div>
             </summary>
-            <div class="trial-body" data-trial-id="${trial.id}">
+            <div class="trial-body" data-trial-id="${trial.id}" data-hypothesis="${hypothesis}">
               <div class="reference-box">
                 <h3>Reference Joyful Sample</h3>
-                <p class="footer-note">Please listen to the joyful reference before rating the anonymous samples.</p>
+                <p class="footer-note">Listen to the reference first, then rate the anonymous samples.</p>
                 <audio controls preload="none" src="${encodePath(trial.reference)}"></audio>
               </div>
 
               <div class="audio-grid">
-                ${randomizedSamples.map((sample) => {
+                ${trial.randomizedSamples.map((sample) => {
                   const sampleState = savedTrial.samples?.[sample.blind] || {};
+                  const questionBlocks = hypothesis === "H2a"
+                    ? `
+                      <div class="question-block">
+                        <div class="question-title">How joyful does this sample sound?</div>
+                        ${likertHTML(`${trial.id}_${sample.blind}_joy`, "1 = Not joyful", "5 = Very joyful", sampleState.joy)}
+                      </div>
+                      <div class="question-block">
+                        <div class="question-title">How well does this sample match the emotional character of the joyful reference?</div>
+                        ${likertHTML(`${trial.id}_${sample.blind}_match`, "1 = Very different", "5 = Very similar", sampleState.match)}
+                      </div>
+                    `
+                    : `
+                      <div class="question-block">
+                        <div class="question-title">How successful is the joyful transfer for this speaker?</div>
+                        ${likertHTML(`${trial.id}_${sample.blind}_transfer`, "1 = Very weak", "5 = Very strong", sampleState.transfer)}
+                      </div>
+                      <div class="question-block">
+                        <div class="question-title">How much does this sample still sound tied to the original emotional speaker?</div>
+                        ${likertHTML(`${trial.id}_${sample.blind}_coupling`, "1 = Not tied", "5 = Strongly tied", sampleState.coupling)}
+                      </div>
+                    `;
+
                   return `
-                    <article class="sample-card" data-actual="${sample.actual}" data-blind="${sample.blind}">
+                    <article class="sample-card" data-actual="${sample.actual}" data-blind="${sample.blind}" data-display-order="${sample.displayOrder}">
                       <div class="sample-label">${sample.blind}</div>
                       <audio controls preload="none" src="${encodePath(sample.path)}"></audio>
-
-                      <div class="question-block">
-                        <div class="question-title">A1. How joyful does this sample sound?</div>
-                        ${likertHTML(`${trial.id}_${sample.blind}_joy`, "1 = Not joyful at all", "7 = Extremely joyful", sampleState.joy)}
-                      </div>
-
-                      <div class="question-block">
-                        <div class="question-title">A2. How closely does this sample match the emotional character of the reference joyful sample?</div>
-                        ${likertHTML(`${trial.id}_${sample.blind}_match`, "1 = Very different", "7 = Very similar", sampleState.match)}
-                      </div>
-
-                      <div class="question-block">
-                        <div class="question-title">A3. How natural does this sample sound overall?</div>
-                        ${likertHTML(`${trial.id}_${sample.blind}_naturalness`, "1 = Very unnatural", "7 = Very natural", sampleState.naturalness)}
-                      </div>
+                      ${questionBlocks}
                     </article>
                   `;
                 }).join("")}
@@ -791,28 +812,25 @@
 
               <div class="compare-grid">
                 <div class="compare-box">
-                  <div class="question-title">B1. Which anonymous sample achieved the most successful joyful emotion transfer?</div>
+                  <div class="question-title">${hypothesis === "H2a" ? "Which sample best represents clear joyful expression?" : "Which sample shows the best cross-speaker transfer?"}</div>
                   ${choiceHTML(
-                    `${trial.id}_best_transfer`,
-                    randomizedSamples.map((sample) => ({ label: sample.blind, value: sample.blind })),
-                    savedTrial.bestTransfer || ""
+                    `${trial.id}_best_sample`,
+                    trial.randomizedSamples.map((sample) => ({ label: sample.blind, value: sample.blind })),
+                    savedTrial.bestSample || ""
                   )}
                 </div>
                 <div class="compare-box">
-                  <div class="question-title">B2. Which anonymous sample sounded the most coupled to the original emotional speaker rather than showing stable transfer?</div>
-                  ${choiceHTML(
-                    `${trial.id}_most_coupled`,
-                    randomizedSamples.map((sample) => ({ label: sample.blind, value: sample.blind })),
-                    savedTrial.mostCoupled || ""
+                  <div class="question-title">${hypothesis === "H2a" ? "Overall, how convincing is the joyful expression in this trial?" : "Overall, how limited is transfer in this trial?"}</div>
+                  ${likertHTML(
+                    `${trial.id}_overall`,
+                    "1 = Very low",
+                    "5 = Very high",
+                    savedTrial.overall || ""
                   )}
                 </div>
                 <div class="compare-box">
-                  <div class="question-title">B3. How successful was the cross-speaker emotion transfer for this utterance overall?</div>
-                  ${likertHTML(`${trial.id}_overall_transfer`, "1 = Not successful", "7 = Very successful", savedTrial.overallTransfer)}
-                </div>
-                <div class="compare-box">
-                  <div class="question-title">B4. Optional trial note</div>
-                  <textarea name="${trial.id}_comment" placeholder="Optional note about speaker coupling, emotional clarity, or naturalness">${savedTrial.comment || ""}</textarea>
+                  <div class="question-title">Optional note</div>
+                  <textarea name="${trial.id}_comment" placeholder="Optional note about this trial">${savedTrial.comment || ""}</textarea>
                 </div>
               </div>
             </div>
@@ -826,19 +844,19 @@
       document.getElementById("globalH2a").innerHTML = likertHTML(
         "global_h2a",
         "1 = Strongly disagree",
-        "7 = Strongly agree",
+        "5 = Strongly agree",
         global.h2a || ""
       );
       document.getElementById("globalH2bWeakness").innerHTML = likertHTML(
         "global_h2b_weakness",
         "1 = Strongly disagree",
-        "7 = Strongly agree",
+        "5 = Strongly agree",
         global.h2bWeakness || ""
       );
       document.getElementById("globalH2bCoupling").innerHTML = likertHTML(
         "global_h2b_coupling",
         "1 = Strongly disagree",
-        "7 = Strongly agree",
+        "5 = Strongly agree",
         global.h2bCoupling || ""
       );
       document.getElementById("globalComment").value = global.comment || "";
@@ -865,23 +883,33 @@
 
       document.querySelectorAll(".trial-body").forEach((trialEl) => {
         const trialId = trialEl.dataset.trialId;
+        const hypothesis = trialEl.dataset.hypothesis;
         const samples = {};
 
         trialEl.querySelectorAll(".sample-card").forEach((sampleEl) => {
           const blind = sampleEl.dataset.blind;
-          samples[blind] = {
+          const samplePayload = {
             actual: sampleEl.dataset.actual,
-            joy: trialEl.querySelector(`input[name="${trialId}_${blind}_joy"]:checked`)?.value || "",
-            match: trialEl.querySelector(`input[name="${trialId}_${blind}_match"]:checked`)?.value || "",
-            naturalness: trialEl.querySelector(`input[name="${trialId}_${blind}_naturalness"]:checked`)?.value || ""
+            blind,
+            displayOrder: Number(sampleEl.dataset.displayOrder)
           };
+
+          if (hypothesis === "H2a") {
+            samplePayload.joy = trialEl.querySelector(`input[name="${trialId}_${blind}_joy"]:checked`)?.value || "";
+            samplePayload.match = trialEl.querySelector(`input[name="${trialId}_${blind}_match"]:checked`)?.value || "";
+          } else {
+            samplePayload.transfer = trialEl.querySelector(`input[name="${trialId}_${blind}_transfer"]:checked`)?.value || "";
+            samplePayload.coupling = trialEl.querySelector(`input[name="${trialId}_${blind}_coupling"]:checked`)?.value || "";
+          }
+
+          samples[blind] = samplePayload;
         });
 
         trialPayload[trialId] = {
-          text: trials.find((trial) => trial.id === trialId)?.text || "",
-          bestTransfer: trialEl.querySelector(`input[name="${trialId}_best_transfer"]:checked`)?.value || "",
-          mostCoupled: trialEl.querySelector(`input[name="${trialId}_most_coupled"]:checked`)?.value || "",
-          overallTransfer: trialEl.querySelector(`input[name="${trialId}_overall_transfer"]:checked`)?.value || "",
+          hypothesis,
+          text: preparedTrials.find((trial) => trial.id === trialId)?.text || "",
+          bestSample: trialEl.querySelector(`input[name="${trialId}_best_sample"]:checked`)?.value || "",
+          overall: trialEl.querySelector(`input[name="${trialId}_overall"]:checked`)?.value || "",
           comment: trialEl.querySelector(`textarea[name="${trialId}_comment"]`)?.value.trim() || "",
           samples
         };
@@ -892,9 +920,8 @@
 
     function updateProgress() {
       const totalQuestions =
-        document.querySelectorAll(".sample-card").length * 3 +
-        trials.length * 3 +
-        trials.length +
+        document.querySelectorAll(".sample-card").length * 2 +
+        preparedTrials.length * 2 +
         3 +
         1;
 
@@ -915,15 +942,9 @@
     }
 
     function validateSubmission(data) {
-      if (!data.meta.participantId) {
-        return "Please enter a participant ID before submitting.";
-      }
-      if (!data.meta.listeningSetup) {
-        return "Please select a listening setup before submitting.";
-      }
-      if (!SUBMISSION_ENDPOINT) {
-        return "Submission endpoint is not configured yet.";
-      }
+      if (!data.meta.participantId) return "Please enter a participant ID before submitting.";
+      if (!data.meta.listeningSetup) return "Please select a listening setup before submitting.";
+      if (!SUBMISSION_ENDPOINT) return "Submission endpoint is not configured yet.";
       return "";
     }
 
@@ -954,7 +975,7 @@
       try {
         form.submit();
         markSubmitted(payload);
-        setStatus("Submission sent. Please check the Google Sheet to confirm the new row was recorded.", "success");
+        setStatus("Submission sent. The payload includes the true model mapping for every sample.", "success");
       } catch (submitError) {
         setStatus(`Submission failed: ${submitError.message}`);
       } finally {
@@ -990,11 +1011,12 @@
         return;
       }
 
-      alert.textContent = `Connected to backend submission endpoint for ${PROJECT_NAME}.`;
+      alert.textContent = `Connected to backend endpoint for ${PROJECT_NAME}. Real model IDs are included in the submitted payload even when the on-page order is shuffled.`;
       alert.classList.add("success");
     }
 
-    renderTrials();
+    renderTrialsForHypothesis("H2a", "h2aContainer");
+    renderTrialsForHypothesis("H2b", "h2bContainer");
     renderGlobalQuestions();
     restoreMeta();
     attachEvents();

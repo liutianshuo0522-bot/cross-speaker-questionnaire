@@ -1,6 +1,7 @@
 var SPREADSHEET_ID = "1B7LC3hGP8YD_ue4le2eMUBFHWvHIVwaPFspAi9ZM5vg";
 var RESPONSE_SHEET_NAME = "responses";
 var ERROR_SHEET_NAME = "errors";
+var RAW_SHEET_NAME = "raw_submissions";
 
 function getSpreadsheet_() {
   if (SPREADSHEET_ID && SPREADSHEET_ID !== "PASTE_YOUR_GOOGLE_SHEET_ID_HERE") {
@@ -56,24 +57,83 @@ function doPost(e) {
       "participant_id",
       "listening_setup",
       "overall_notes",
+      "client_timestamp",
+      "page_url",
       "global_h2a",
       "global_h2b_weakness",
       "global_h2b_coupling",
       "global_comment",
+      "trial_id",
+      "hypothesis",
+      "trial_text",
+      "blind_label",
+      "actual_model",
+      "display_order",
+      "joy",
+      "match",
+      "transfer",
+      "coupling",
+      "best_sample",
+      "overall_trial_score",
+      "trial_comment"
+    ]);
+
+    var rawSheet = getOrCreateSheet_(RAW_SHEET_NAME, [
+      "server_timestamp",
+      "participant_id",
       "payload_json"
     ]);
 
-    sheet.appendRow([
+    rawSheet.appendRow([
       new Date(),
       payload.meta && payload.meta.participantId ? payload.meta.participantId : "",
-      payload.meta && payload.meta.listeningSetup ? payload.meta.listeningSetup : "",
-      payload.meta && payload.meta.overallNotes ? payload.meta.overallNotes : "",
-      payload.global && payload.global.h2a ? payload.global.h2a : "",
-      payload.global && payload.global.h2bWeakness ? payload.global.h2bWeakness : "",
-      payload.global && payload.global.h2bCoupling ? payload.global.h2bCoupling : "",
-      payload.global && payload.global.comment ? payload.global.comment : "",
       JSON.stringify(payload)
     ]);
+
+    var serverTimestamp = new Date();
+    var participantId = payload.meta && payload.meta.participantId ? payload.meta.participantId : "";
+    var listeningSetup = payload.meta && payload.meta.listeningSetup ? payload.meta.listeningSetup : "";
+    var overallNotes = payload.meta && payload.meta.overallNotes ? payload.meta.overallNotes : "";
+    var clientTimestamp = payload.meta && payload.meta.clientTimestamp ? payload.meta.clientTimestamp : "";
+    var pageUrl = payload.meta && payload.meta.pageUrl ? payload.meta.pageUrl : "";
+    var globalH2a = payload.global && payload.global.h2a ? payload.global.h2a : "";
+    var globalH2bWeakness = payload.global && payload.global.h2bWeakness ? payload.global.h2bWeakness : "";
+    var globalH2bCoupling = payload.global && payload.global.h2bCoupling ? payload.global.h2bCoupling : "";
+    var globalComment = payload.global && payload.global.comment ? payload.global.comment : "";
+
+    Object.keys(payload.trials || {}).forEach(function(trialId) {
+      var trial = payload.trials[trialId] || {};
+      var samples = trial.samples || {};
+
+      Object.keys(samples).forEach(function(blindLabel) {
+        var sample = samples[blindLabel] || {};
+        sheet.appendRow([
+          serverTimestamp,
+          participantId,
+          listeningSetup,
+          overallNotes,
+          clientTimestamp,
+          pageUrl,
+          globalH2a,
+          globalH2bWeakness,
+          globalH2bCoupling,
+          globalComment,
+          trialId,
+          trial.hypothesis || "",
+          trial.text || "",
+          blindLabel,
+          sample.actual || "",
+          sample.displayOrder || "",
+          sample.joy || "",
+          sample.match || "",
+          sample.transfer || "",
+          sample.coupling || "",
+          trial.bestSample || "",
+          trial.overall || "",
+          trial.comment || ""
+        ]);
+      });
+    });
 
     return ContentService
       .createTextOutput(JSON.stringify({ ok: true }))
